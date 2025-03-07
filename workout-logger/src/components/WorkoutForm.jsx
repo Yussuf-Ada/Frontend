@@ -1,6 +1,17 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { addWorkout } from "../utils/api.js";
+import {
+  Box,
+  Paper,
+  Typography,
+  TextField,
+  Button,
+  Grid,
+  Stack,
+} from "@mui/material";
+import SaveIcon from "@mui/icons-material/Save";
+import CloseIcon from "@mui/icons-material/Close";
 
 function WorkoutForm({ preselectedExercise, onClose }) {
   const navigate = useNavigate();
@@ -24,57 +35,105 @@ function WorkoutForm({ preselectedExercise, onClose }) {
   };
 
   return (
-    <div className="workout-form">
-      <h2>Add New Workout</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Exercise Name"
-          value={workout.exercise}
-          onChange={(e) => setWorkout({ ...workout, exercise: e.target.value })}
-        />
-        <input
-          type="date"
-          value={workout.date}
-          onChange={(e) => setWorkout({ ...workout, date: e.target.value })}
-        />
-        <input
-          type="number"
-          placeholder="Sets"
-          value={workout.sets}
-          onChange={(e) => setWorkout({ ...workout, sets: e.target.value })}
-        />
-        <input
-          type="number"
-          placeholder="Reps"
-          value={workout.reps}
-          onChange={(e) => setWorkout({ ...workout, reps: e.target.value })}
-        />
-        <input
-          type="number"
-          placeholder="Weight (kg)"
-          value={workout.weight}
-          onChange={(e) => setWorkout({ ...workout, weight: e.target.value })}
-        />
-        <select
-          value={workout.category}
-          onChange={(e) => setWorkout({ ...workout, category: e.target.value })}
-        >
-          <option value="">Select Category</option>
-          <option value="Strength">Strength</option>
-          <option value="Cardio">Cardio</option>
-          <option value="Flexibility">Flexibility</option>
-        </select>
-        <div className="form-buttons">
-          <button type="submit">Add Workout</button>
-          {onClose && (
-            <button type="button" onClick={onClose}>
-              Cancel
-            </button>
-          )}
-        </div>
-      </form>
-    </div>
+    <Box
+      sx={{
+        maxWidth: 600,
+        mx: "auto",
+        mt: 4,
+        p: 3,
+      }}
+    >
+      <Paper elevation={3} sx={{ p: 4 }}>
+        <Typography varant="h5" sx={{ mb: 6 }}>
+          Add New Workout
+        </Typography>
+
+        <Box component="form" onSubmit={handleSubmit}>
+          <Grid container spacing={3}>
+            <Grid xs={12}>
+              <TextField
+                fullWidth
+                label="Exercise Name"
+                value={workout.exercise}
+                onChange={(e) =>
+                  setWorkout({ ...workout, exercise: e.target.value })
+                }
+              />
+            </Grid>
+
+            <Grid xs={12}>
+              <TextField
+                fullWidth
+                type="date"
+                label="Date"
+                value={workout.date}
+                onChange={(e) =>
+                  setWorkout({ ...workout, date: e.target.value })
+                }
+                InputLabelProps={{ shrink: true }}
+              />
+            </Grid>
+
+            <Grid xs={12} sm={4}>
+              <TextField
+                fullWidth
+                type="number"
+                label="Sets"
+                value={workout.sets}
+                onChange={(e) =>
+                  setWorkout({ ...workout, sets: e.target.value })
+                }
+              />
+            </Grid>
+
+            <Grid xs={12} sm={4}>
+              <TextField
+                fullWidth
+                type="number"
+                label="Reps"
+                value={workout.reps}
+                onChange={(e) =>
+                  setWorkout({ ...workout, reps: e.target.value })
+                }
+              />
+            </Grid>
+
+            <Grid xs={12} sm={4}>
+              <TextField
+                fullWidth
+                type="number"
+                label="Weight (kg)"
+                value={workout.weight}
+                onChange={(e) =>
+                  setWorkout({ ...workout, weight: e.target.value })
+                }
+              />
+            </Grid>
+
+            <Grid xs={12}>
+              <Stack direction="row" spacing={2} justifyContent="flex-end">
+                {onClose && (
+                  <Button
+                    variant="outlined"
+                    startIcon={<CloseIcon />}
+                    onClick={onClose}
+                  >
+                    Cancel
+                  </Button>
+                )}
+                <Button
+                  type="submit"
+                  variant="contained"
+                  startIcon={<SaveIcon />}
+                >
+                  Add Workout
+                </Button>
+              </Stack>
+            </Grid>
+          </Grid>
+        </Box>
+      </Paper>
+    </Box>
   );
 }
 

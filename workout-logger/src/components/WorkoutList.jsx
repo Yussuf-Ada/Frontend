@@ -1,5 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { getWorkouts, deleteWorkout, editWorkout } from "../utils/api.js";
+import {
+  Container,
+  Typography,
+  Grid,
+  Card,
+  CardContent,
+  Button,
+  TextField,
+  Box,
+  Divider,
+} from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 
 function WorkoutList() {
   const [workoutsByDay, setWorkoutsByDay] = useState({});
@@ -11,8 +24,6 @@ function WorkoutList() {
 
   const loadWorkouts = async () => {
     const data = await getWorkouts();
-
-    // Group workouts by date
     const grouped = data.reduce((acc, workout) => {
       const date = workout.date
         ? new Date(workout.date)
@@ -24,9 +35,7 @@ function WorkoutList() {
             .replace(",", "")
         : "Today";
 
-      if (!acc[date]) {
-        acc[date] = [];
-      }
+      if (!acc[date]) acc[date] = [];
       acc[date].push(workout);
       return acc;
     }, {});
@@ -54,61 +63,112 @@ function WorkoutList() {
   };
 
   return (
-    <div className="workout-list">
-      <h2>My Workouts</h2>
+    <Container maxWidth="xl" sx={{ py: 4 }}>
+      <Typography variant="h4" gutterBottom>
+        My Workouts
+      </Typography>
       {Object.entries(workoutsByDay).map(([date, workouts]) => (
-        <div key={date} className="day-group">
-          <h3 className="date-header">{date}</h3>
-          <div className="workouts-grid">
+        <Box key={date} sx={{ mb: 4 }}>
+          <Typography variant="h5" sx={{ my: 2 }}>
+            {date}
+          </Typography>
+          <Divider sx={{ mb: 2 }} />
+          <Grid container spacing={3}>
             {workouts.map((workout) => (
-              <div key={workout.id} className="workout-card">
-                {editingWorkout?.id === workout.id ? (
-                  <div className="edit-form">
-                    <input
-                      defaultValue={workout.exercise}
-                      onChange={(e) => (workout.exercise = e.target.value)}
-                    />
-                    <input
-                      type="number"
-                      defaultValue={workout.sets}
-                      onChange={(e) => (workout.sets = e.target.value)}
-                    />
-                    <input
-                      type="number"
-                      defaultValue={workout.reps}
-                      onChange={(e) => (workout.reps = e.target.value)}
-                    />
-                    <input
-                      type="number"
-                      defaultValue={workout.weight}
-                      onChange={(e) => (workout.weight = e.target.value)}
-                    />
-                    <button onClick={() => handleSaveEdit(workout.id, workout)}>
-                      Save
-                    </button>
-                    <button onClick={() => setEditingWorkout(null)}>
-                      Cancel
-                    </button>
-                  </div>
-                ) : (
-                  <>
-                    <h3>{workout.exercise}</h3>
-                    <p>Sets: {workout.sets}</p>
-                    <p>Reps: {workout.reps}</p>
-                    <p>Weight: {workout.weight}kg</p>
-                    <p>Category: {workout.category}</p>
-                    <button onClick={() => handleDelete(workout.id)}>
-                      Delete
-                    </button>
-                    <button onClick={() => handleEdit(workout)}>Edit</button>
-                  </>
-                )}
-              </div>
+              <Grid item xs={12} sm={6} md={4} lg={3} key={workout.id}>
+                <Card elevation={2}>
+                  <CardContent>
+                    {editingWorkout?.id === workout.id ? (
+                      <Box
+                        component="form"
+                        sx={{ "& .MuiTextField-root": { mb: 2 } }}
+                      >
+                        <TextField
+                          fullWidth
+                          label="Exercise"
+                          defaultValue={workout.exercise}
+                          onChange={(e) => (workout.exercise = e.target.value)}
+                        />
+                        <TextField
+                          fullWidth
+                          type="number"
+                          label="Sets"
+                          defaultValue={workout.sets}
+                          onChange={(e) => (workout.sets = e.target.value)}
+                        />
+                        <TextField
+                          fullWidth
+                          type="number"
+                          label="Reps"
+                          defaultValue={workout.reps}
+                          onChange={(e) => (workout.reps = e.target.value)}
+                        />
+                        <TextField
+                          fullWidth
+                          type="number"
+                          label="Weight (kg)"
+                          defaultValue={workout.weight}
+                          onChange={(e) => (workout.weight = e.target.value)}
+                        />
+                        <TextField
+                          fullWidth
+                          type="text"
+                          label="Notes"
+                          defaultValue={workout.notes}
+                          onChange={(e) => (workout.notes = e.target.value)}
+                        />
+                        <Box sx={{ mt: 2 }}>
+                          <Button
+                            variant="contained"
+                            onClick={() => handleSaveEdit(workout.id, workout)}
+                            sx={{ mr: 1 }}
+                          >
+                            Save
+                          </Button>
+                          <Button
+                            variant="outlined"
+                            onClick={() => setEditingWorkout(null)}
+                          >
+                            Cancel
+                          </Button>
+                        </Box>
+                      </Box>
+                    ) : (
+                      <>
+                        <Typography variant="h6" gutterBottom>
+                          {workout.exercise}
+                        </Typography>
+                        <Typography>Sets: {workout.sets}</Typography>
+                        <Typography>Reps: {workout.reps}</Typography>
+                        <Typography>Weight: {workout.weight}kg</Typography>
+                        <Typography>Notes: {workout.notes}</Typography>
+                        <Box sx={{ mt: 2, display: "flex", gap: 1 }}>
+                          <Button
+                            variant="outlined"
+                            color="error"
+                            startIcon={<DeleteIcon />}
+                            onClick={() => handleDelete(workout.id)}
+                          >
+                            Delete
+                          </Button>
+                          <Button
+                            variant="outlined"
+                            startIcon={<EditIcon />}
+                            onClick={() => handleEdit(workout)}
+                          >
+                            Edit
+                          </Button>
+                        </Box>
+                      </>
+                    )}
+                  </CardContent>
+                </Card>
+              </Grid>
             ))}
-          </div>
-        </div>
+          </Grid>
+        </Box>
       ))}
-    </div>
+    </Container>
   );
 }
 
