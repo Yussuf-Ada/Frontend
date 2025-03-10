@@ -10,7 +10,6 @@ import "@testing-library/jest-dom";
 import WorkoutList from "../../components/WorkoutList";
 import { getWorkouts, deleteWorkout, editWorkout } from "../../utils/api";
 
-// Mock the API functions
 jest.mock("../../utils/api", () => ({
   getWorkouts: jest.fn(),
   deleteWorkout: jest.fn(),
@@ -59,5 +58,51 @@ describe("WorkoutList", () => {
     expect(screen.getByText("Weight: 60kg")).toBeInTheDocument();
 
     expect(getWorkouts).toHaveBeenCalledTimes(1);
+  });
+
+  test("can delete a workout", async () => {
+    await act(async () => {
+      render(<WorkoutList />);
+    });
+
+    await screen.findByText("Bench Press");
+
+    const deleteButtons = screen.getAllByText("Delete");
+
+    await act(async () => {
+      fireEvent.click(deleteButtons[0]);
+    });
+
+    expect(deleteWorkout).toHaveBeenCalledWith(1);
+    expect(getWorkouts).toHaveBeenCalledTimes(2);
+  });
+
+  test("can edit a workout", async () => {
+    await act(async () => {
+      render(<WorkoutList />);
+    });
+
+    await screen.findByText("Bench Press");
+
+    const editButtons = screen.getAllByText("Edit");
+
+    await act(async () => {
+      fireEvent.click(editButtons[0]);
+    });
+
+    const saveButton = await screen.findByText("Save");
+    expect(saveButton).toBeInTheDocument();
+
+    const weightInputs = screen.getAllByLabelText("Weight (kg)");
+
+    await act(async () => {
+      fireEvent.change(weightInputs[0], { target: { value: "65" } });
+      fireEvent.click(saveButton);
+    });
+
+    expect(editWorkout).toHaveBeenCalledWith(
+      1,
+      expect.objectContaining({ weight: "65" })
+    );
   });
 });
