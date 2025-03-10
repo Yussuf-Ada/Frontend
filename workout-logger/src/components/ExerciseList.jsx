@@ -93,7 +93,7 @@ function ExerciseList() {
       <Grid container spacing={1}>
         {filteredExercises.map((exercise) => (
           <Grid xs={12} sm={6} md={4} lg={3} key={exercise.id}>
-            <Card>
+            <Card sx={{ margin: 2 }}>
               <CardContent>
                 <Typography variant="h6" gutterBottom>
                   {exercise.name}
