@@ -17,8 +17,15 @@ import EditIcon from "@mui/icons-material/Edit";
 function WorkoutList() {
   const [workoutsByDay, setWorkoutsByDay] = useState({});
   const [editingWorkout, setEditingWorkout] = useState(null);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
+    // Get the logged-in user from localStorage
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      setUser(JSON.parse(userData));
+    }
+
     loadWorkouts();
   }, []);
 
@@ -65,7 +72,7 @@ function WorkoutList() {
   return (
     <Container maxWidth="xl" sx={{ py: 4 }}>
       <Typography variant="h4" gutterBottom>
-        My Workouts
+        {user ? `${user.name}'s Workouts` : "Workouts"}
       </Typography>
       {Object.entries(workoutsByDay).map(([date, workouts]) => (
         <Box key={date} sx={{ mb: 4 }}>
