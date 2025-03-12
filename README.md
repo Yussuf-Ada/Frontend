@@ -40,6 +40,10 @@ Workout Logger is a web application that helps you track and manage your fitness
 3. Save your workout to track your progress over time
 4. View your workout history to monitor improvements
 
+## Documentation
+
+- API response examples can be found in the testing-screenshots folder, showing successful API interactions with the backend as well as error responses. This folder also contains the DB schema and logs from Supabase.
+
 ## Testing
 
 Run the test suite with:
