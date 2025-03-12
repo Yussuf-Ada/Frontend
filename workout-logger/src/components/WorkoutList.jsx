@@ -20,7 +20,6 @@ function WorkoutList() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    // Get the logged-in user from localStorage
     const userData = localStorage.getItem("user");
     if (userData) {
       setUser(JSON.parse(userData));

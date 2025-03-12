@@ -3,12 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { addWorkout } from "../utils/api.js";
 import {
   Box,
-  Paper,
   Typography,
   TextField,
   Button,
   Grid,
-  Stack,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 import CloseIcon from "@mui/icons-material/Close";
@@ -35,22 +37,16 @@ function WorkoutForm({ preselectedExercise, onClose }) {
   };
 
   return (
-    <Box
-      sx={{
-        maxWidth: 600,
-        mx: "auto",
-        mt: 4,
-        p: 3,
-      }}
-    >
-      <Paper elevation={3} sx={{ p: 4 }}>
-        <Typography varant="h5" sx={{ mb: 6 }}>
-          Add New Workout
-        </Typography>
+    // Dialog component creates a modal that appears on top of the page content rather than at the bottom like Paper component.
+    <Dialog open={true} onClose={onClose} maxWidth="sm" fullWidth>
+      <DialogTitle>
+        <Typography variant="h5">Add New Workout</Typography>
+      </DialogTitle>
 
-        <Box component="form" onSubmit={handleSubmit}>
+      <DialogContent>
+        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
           <Grid container spacing={3}>
-            <Grid xs={12}>
+            <Grid item xs={12}>
               <TextField
                 fullWidth
                 label="Exercise Name"
@@ -61,7 +57,7 @@ function WorkoutForm({ preselectedExercise, onClose }) {
               />
             </Grid>
 
-            <Grid xs={12}>
+            <Grid item xs={12}>
               <TextField
                 fullWidth
                 type="date"
@@ -70,11 +66,10 @@ function WorkoutForm({ preselectedExercise, onClose }) {
                 onChange={(e) =>
                   setWorkout({ ...workout, date: e.target.value })
                 }
-                InputLabelProps={{ shrink: true }}
               />
             </Grid>
 
-            <Grid xs={12} sm={4}>
+            <Grid item xs={12} sm={4}>
               <TextField
                 fullWidth
                 type="number"
@@ -86,7 +81,7 @@ function WorkoutForm({ preselectedExercise, onClose }) {
               />
             </Grid>
 
-            <Grid xs={12} sm={4}>
+            <Grid item xs={12} sm={4}>
               <TextField
                 fullWidth
                 type="number"
@@ -98,7 +93,7 @@ function WorkoutForm({ preselectedExercise, onClose }) {
               />
             </Grid>
 
-            <Grid xs={12} sm={4}>
+            <Grid item xs={12} sm={4}>
               <TextField
                 fullWidth
                 type="number"
@@ -109,31 +104,29 @@ function WorkoutForm({ preselectedExercise, onClose }) {
                 }
               />
             </Grid>
-
-            <Grid xs={12}>
-              <Stack direction="row" spacing={2} justifyContent="flex-end">
-                {onClose && (
-                  <Button
-                    variant="outlined"
-                    startIcon={<CloseIcon />}
-                    onClick={onClose}
-                  >
-                    Cancel
-                  </Button>
-                )}
-                <Button
-                  type="submit"
-                  variant="contained"
-                  startIcon={<SaveIcon />}
-                >
-                  Add Workout
-                </Button>
-              </Stack>
-            </Grid>
           </Grid>
         </Box>
-      </Paper>
-    </Box>
+      </DialogContent>
+
+      <DialogActions>
+        {onClose && (
+          <Button
+            variant="outlined"
+            startIcon={<CloseIcon />}
+            onClick={onClose}
+          >
+            Cancel
+          </Button>
+        )}
+        <Button
+          onClick={handleSubmit}
+          variant="contained"
+          startIcon={<SaveIcon />}
+        >
+          Add Workout
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 }
 

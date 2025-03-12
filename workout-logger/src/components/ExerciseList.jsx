@@ -41,12 +41,17 @@ function ExerciseList() {
     setShowForm(true);
   };
 
+  const handleCustomExercise = () => {
+    setSelectedExercise(null);
+    setShowForm(true);
+  };
+
   const handleFormClose = () => {
     setShowForm(false);
     setSelectedExercise(null);
   };
 
-  const handleCategoryChange = (event, newCategory) => {
+  const handleCategoryChange = (newCategory) => {
     if (newCategory !== null) {
       setSelectedCategory(newCategory);
     }
@@ -70,6 +75,7 @@ function ExerciseList() {
           onChange={handleCategoryChange}
           aria-label="exercise category"
         >
+          {" "}
           {categories.map((category) => (
             <ToggleButton
               key={category}
@@ -88,6 +94,15 @@ function ExerciseList() {
             </ToggleButton>
           ))}
         </ToggleButtonGroup>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleCustomExercise}
+          endIcon={<AddIcon />}
+          sx={{ ml: 2 }}
+        >
+          Custom Exercise
+        </Button>
       </Box>
 
       <Grid container spacing={1}>
@@ -104,7 +119,7 @@ function ExerciseList() {
               </CardContent>
               <CardActions>
                 <Button
-                  startIcon={<AddIcon />}
+                  endIcon={<AddIcon />}
                   variant="contained"
                   fullWidth
                   onClick={() => handleAddToWorkout(exercise)}
@@ -119,7 +134,8 @@ function ExerciseList() {
 
       {showForm && (
         <WorkoutForm
-          preselectedExercise={selectedExercise.name}
+          preselectedExercise={selectedExercise ? selectedExercise.name : ""}
+          // Allowing for cases where we use custom exercises, since the exercise name is null.
           onClose={handleFormClose}
         />
       )}
