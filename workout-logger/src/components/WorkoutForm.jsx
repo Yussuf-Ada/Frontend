@@ -22,7 +22,6 @@ function WorkoutForm({ preselectedExercise, onClose }) {
     sets: "",
     reps: "",
     weight: "",
-    category: "",
     date: new Date().toISOString().split("T")[0],
   });
 
