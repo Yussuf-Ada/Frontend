@@ -58,8 +58,8 @@ function ExerciseList() {
     setSelectedExercise(null);
   };
 
-  // Updates the category filter selection
-  const handleCategoryChange = (newCategory) => {
+  // First parameter (event) is required by MUI ToggleButtonGroup but not used
+  const handleCategoryChange = (event, newCategory) => {
     if (newCategory !== null) {
       setSelectedCategory(newCategory);
     }
