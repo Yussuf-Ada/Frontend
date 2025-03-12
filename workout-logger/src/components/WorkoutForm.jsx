@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { addWorkout } from "../utils/api.js";
 import {
   Box,
-  Typography,
   TextField,
   Button,
   Grid,
@@ -41,9 +40,7 @@ function WorkoutForm({ preselectedExercise, onClose }) {
   return (
     // Modal dialogue for adding workouts with a clean, focused interface
     <Dialog open={true} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>
-        <Typography variant="h5">Add New Workout</Typography>
-      </DialogTitle>
+      <DialogTitle>Add New Workout</DialogTitle>
 
       <DialogContent>
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
