@@ -16,17 +16,21 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 
 function ExerciseList() {
+  // State management for category filtering and exercise selection
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedExercise, setSelectedExercise] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [exercises, setExercises] = useState([]);
 
+  // Available exercise categories
   const categories = ["all", "Chest", "Back", "Legs", "Arms", "Shoulders"];
 
   useEffect(() => {
+    // Fetch exercises on component mount
     fetchExercises();
   }, []);
 
+  // Retrieves exercise data from the API
   async function fetchExercises() {
     try {
       const data = await getExercises();
@@ -36,27 +40,32 @@ function ExerciseList() {
     }
   }
 
+  // Handles adding an exercise to the workout
   const handleAddToWorkout = (exercise) => {
     setSelectedExercise(exercise);
     setShowForm(true);
   };
 
+  // Allows creation of custom exercises
   const handleCustomExercise = () => {
     setSelectedExercise(null);
     setShowForm(true);
   };
 
+  // Closes the workout form when finished
   const handleFormClose = () => {
     setShowForm(false);
     setSelectedExercise(null);
   };
 
+  // Updates the category filter selection
   const handleCategoryChange = (newCategory) => {
     if (newCategory !== null) {
       setSelectedCategory(newCategory);
     }
   };
 
+  // Filters exercises based on selected category
   const filteredExercises =
     selectedCategory === "all"
       ? exercises
@@ -69,6 +78,7 @@ function ExerciseList() {
       </Typography>
 
       <Box sx={{ mb: 7 }}>
+        {/* Category filter controls */}
         <ToggleButtonGroup
           value={selectedCategory}
           exclusive
@@ -105,6 +115,7 @@ function ExerciseList() {
         </Button>
       </Box>
 
+      {/* Grid display of filtered exercises */}
       <Grid container spacing={1}>
         {filteredExercises.map((exercise) => (
           <Grid xs={12} sm={6} md={4} lg={3} key={exercise.id}>
@@ -132,10 +143,11 @@ function ExerciseList() {
         ))}
       </Grid>
 
+      {/* Conditionally render the workout form when an exercise is selected */}
       {showForm && (
         <WorkoutForm
           preselectedExercise={selectedExercise ? selectedExercise.name : ""}
-          // Allowing for cases where we use custom exercises, since the exercise name is null.
+          // Supporting custom exercises, where the exercise name is null
           onClose={handleFormClose}
         />
       )}

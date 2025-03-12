@@ -15,21 +15,26 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 
 function WorkoutList() {
+  // State for storing workouts grouped by date and tracking the workout being edited
   const [workoutsByDay, setWorkoutsByDay] = useState({});
   const [editingWorkout, setEditingWorkout] = useState(null);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
+    // Load user data from localStorage if available
     const userData = localStorage.getItem("user");
     if (userData) {
       setUser(JSON.parse(userData));
     }
 
+    // Fetch workouts data on component mount
     loadWorkouts();
   }, []);
 
+  // Fetches workout data and organizes it by date
   const loadWorkouts = async () => {
     const data = await getWorkouts();
+    // Group workouts by date for better organization
     const grouped = data.reduce((acc, workout) => {
       const date = workout.date
         ? new Date(workout.date)
@@ -46,6 +51,7 @@ function WorkoutList() {
       return acc;
     }, {});
 
+    // Sort entries by date (newest first)
     const sortedEntries = Object.entries(grouped).sort(
       ([dateA], [dateB]) => new Date(dateB) - new Date(dateA)
     );
@@ -53,16 +59,19 @@ function WorkoutList() {
     setWorkoutsByDay(Object.fromEntries(sortedEntries));
   };
 
+  // Enables edit mode for a selected workout
   const handleEdit = (workout) => {
     setEditingWorkout(workout);
   };
 
+  // Saves the edited workout data to the backend
   const handleSaveEdit = async (id, updatedData) => {
     await editWorkout(id, updatedData);
     setEditingWorkout(null);
     loadWorkouts();
   };
 
+  // Deletes a workout from the backend
   const handleDelete = async (id) => {
     await deleteWorkout(id);
     loadWorkouts();
@@ -73,6 +82,7 @@ function WorkoutList() {
       <Typography variant="h4" gutterBottom>
         {user ? `${user.name}'s Workouts` : "Workouts"}
       </Typography>
+      {/* Render workouts grouped by date */}
       {Object.entries(workoutsByDay).map(([date, workouts]) => (
         <Box key={date} sx={{ mb: 4 }}>
           <Typography variant="h5" sx={{ my: 2 }}>
@@ -84,6 +94,7 @@ function WorkoutList() {
               <Grid item xs={12} sm={6} md={4} lg={3} key={workout.id}>
                 <Card elevation={2}>
                   <CardContent>
+                    {/* Show edit form when a workout is being edited */}
                     {editingWorkout?.id === workout.id ? (
                       <Box
                         component="form"

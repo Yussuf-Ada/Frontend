@@ -17,6 +17,7 @@ import CloseIcon from "@mui/icons-material/Close";
 
 function WorkoutForm({ preselectedExercise, onClose }) {
   const navigate = useNavigate();
+  // State to track workout details with prefilled exercise name if available
   const [workout, setWorkout] = useState({
     exercise: preselectedExercise || "",
     sets: "",
@@ -26,6 +27,7 @@ function WorkoutForm({ preselectedExercise, onClose }) {
     date: new Date().toISOString().split("T")[0],
   });
 
+  // Handles form submission and navigates appropriately
   const handleSubmit = async (e) => {
     e.preventDefault();
     await addWorkout(workout);
@@ -37,7 +39,7 @@ function WorkoutForm({ preselectedExercise, onClose }) {
   };
 
   return (
-    // Dialog component creates a modal that appears on top of the page content rather than at the bottom like Paper component.
+    // Modal dialogue for adding workouts with a clean, focused interface
     <Dialog open={true} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle>
         <Typography variant="h5">Add New Workout</Typography>
@@ -69,6 +71,7 @@ function WorkoutForm({ preselectedExercise, onClose }) {
               />
             </Grid>
 
+            {/* Organises workout metrics in three columns for efficient data entry */}
             <Grid item xs={12} sm={4}>
               <TextField
                 fullWidth
@@ -109,6 +112,7 @@ function WorkoutForm({ preselectedExercise, onClose }) {
       </DialogContent>
 
       <DialogActions>
+        {/* Conditionally render cancel button when used as a modal */}
         {onClose && (
           <Button
             variant="outlined"
