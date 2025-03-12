@@ -4,6 +4,7 @@ import "@testing-library/jest-dom";
 import WorkoutList from "../../components/WorkoutList";
 import { getWorkouts, deleteWorkout, editWorkout } from "../../utils/api";
 
+// Mock the API functions to avoid actual network requests during testing
 jest.mock("../../utils/api", () => ({
   getWorkouts: jest.fn(),
   deleteWorkout: jest.fn(),
@@ -11,6 +12,7 @@ jest.mock("../../utils/api", () => ({
 }));
 
 describe("WorkoutList", () => {
+  // Sample workout data for testing purposes
   const mockWorkouts = [
     {
       id: 1,
@@ -33,12 +35,15 @@ describe("WorkoutList", () => {
   ];
 
   beforeEach(() => {
+    // Reset mock function states before each test to ensure clean testing environment
     jest.clearAllMocks();
+    // Setup mock responses for API calls
     getWorkouts.mockResolvedValue(mockWorkouts);
     deleteWorkout.mockResolvedValue({});
     editWorkout.mockResolvedValue({});
   });
 
+  // Verify the component properly renders the workout list from API data
   test("renders workout list correctly", async () => {
     await act(async () => {
       render(<WorkoutList />);
@@ -54,6 +59,7 @@ describe("WorkoutList", () => {
     expect(getWorkouts).toHaveBeenCalledTimes(1);
   });
 
+  // Ensure the delete functionality properly removes a workout entry
   test("can delete a workout", async () => {
     await act(async () => {
       render(<WorkoutList />);
@@ -67,10 +73,13 @@ describe("WorkoutList", () => {
       fireEvent.click(deleteButtons[0]);
     });
 
+    // Check if the deletion API was called with the correct workout ID
     expect(deleteWorkout).toHaveBeenCalledWith(1);
+    // Verify list is refreshed after deletion
     expect(getWorkouts).toHaveBeenCalledTimes(2);
   });
 
+  // Validate the edit functionality correctly updates workout information
   test("can edit a workout", async () => {
     await act(async () => {
       render(<WorkoutList />);
@@ -94,6 +103,7 @@ describe("WorkoutList", () => {
       fireEvent.click(saveButton);
     });
 
+    // Confirm the edit API was called with the proper workout ID and updated weight value
     expect(editWorkout).toHaveBeenCalledWith(
       1,
       expect.objectContaining({ weight: "65" })
