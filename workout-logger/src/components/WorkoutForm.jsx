@@ -15,6 +15,8 @@ import SaveIcon from "@mui/icons-material/Save";
 import CloseIcon from "@mui/icons-material/Close";
 
 function WorkoutForm({ preselectedExercise, onClose }) {
+  // Children props passed from the parent exerciseList component,making sure we have access to the preselected exercise
+  // As well as if the workout form has been closed
   const navigate = useNavigate();
   // State to track workout details with prefilled exercise name if available
   const [workout, setWorkout] = useState({
@@ -37,7 +39,7 @@ function WorkoutForm({ preselectedExercise, onClose }) {
   };
 
   return (
-    // Modal dialogue for adding workouts with a clean, focused interface
+    // Modal dialogue for adding workouts. I switched from "Paper" to "Dialog" material UI components, to center the form
     <Dialog open={true} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle>Add New Workout</DialogTitle>
 

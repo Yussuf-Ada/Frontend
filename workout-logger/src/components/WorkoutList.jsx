@@ -41,7 +41,7 @@ function WorkoutList() {
   // Fetches workout data and organizes it by date
   const loadWorkouts = async () => {
     const data = await getWorkouts();
-    // Group workouts by date for better organization
+    // Group workouts by date for better organisation
     const grouped = data.reduce((acc, workout) => {
       const date = workout.date
         ? new Date(workout.date)
@@ -53,6 +53,7 @@ function WorkoutList() {
             .replace(",", "")
         : "Today";
 
+      // Create array for the date if it doesn't exist yet, then add the workout to that date's array
       if (!acc[date]) acc[date] = [];
       acc[date].push(workout);
       return acc;
