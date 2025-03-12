@@ -24,7 +24,14 @@ function WorkoutList() {
     // Load user data from localStorage if available
     const userData = localStorage.getItem("user");
     if (userData) {
-      setUser(JSON.parse(userData));
+      const parsedUser = JSON.parse(userData);
+      setUser(parsedUser);
+
+      // debug code
+      console.log("User in localStorage:", parsedUser);
+      console.log("User ID type:", typeof parsedUser.id);
+    } else {
+      console.log("No user found in localStorage");
     }
 
     // Fetch workouts data on component mount
