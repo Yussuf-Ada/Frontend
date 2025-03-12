@@ -96,31 +96,53 @@ export const editWorkout = async (id, workout, userId) => {
       workout.user_id = userId;
     }
 
-    const response = await axios.put(
-      `${API_URL}/workouts/${id}?user_id=${userId}`,
-      workout,
-      {
-        headers: {
-          Authorization: `Bearer ${ANON_KEY}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    return response.data;
-  } catch (error) {
-    handleApiError(error, "editing workout");
-  }
-};
-export const deleteWorkout = async (id, userId) => {
-  try {
-    userId = getUserId(userId);
+    // Log the URL and request details
+    const url = `${API_URL}/workouts/${id}?user_id=${userId}`;
+    console.log("EDIT request URL:", url);
+    console.log("Editing workout data:", workout);
+    console.log("Headers:", {
+      Authorization: `Bearer ${ANON_KEY}`,
+      "Content-Type": "application/json",
+    });
 
-    const response = await axios.delete(`${API_URL}/${id}?user_id=${userId}`, {
+    const response = await axios.put(url, workout, {
       headers: {
         Authorization: `Bearer ${ANON_KEY}`,
         "Content-Type": "application/json",
       },
     });
+
+    // Add success log message
+    console.log("✅ SUCCESS: Workout edited successfully!", id);
+    console.log("Updated workout data:", response.data);
+
+    return response.data;
+  } catch (error) {
+    handleApiError(error, "editing workout");
+  }
+};
+
+export const deleteWorkout = async (id, userId) => {
+  try {
+    userId = getUserId(userId);
+
+    const url = `${API_URL}/${id}?user_id=${userId}`;
+    console.log("DELETE request URL:", url);
+    console.log("Headers:", {
+      Authorization: `Bearer ${ANON_KEY}`,
+      "Content-Type": "application/json",
+    });
+
+    const response = await axios.delete(url, {
+      headers: {
+        Authorization: `Bearer ${ANON_KEY}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    // Add success log message
+    console.log("✅ SUCCESS: Workout deleted successfully!", id);
+
     return response.data;
   } catch (error) {
     handleApiError(error, "deleting workout");
